@@ -1,36 +1,26 @@
-// Workouts.js
-import React from 'react';
-import WorkoutList from './AddWorkout';
+import WorkoutList from "./WorkoutList";  // Adjusted to your component
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const Workouts = () => {
-  const workoutsData = [
-    {
-      "Title": "Push-up",
-      "Category": "Strength",
-      "Duration": "30 minutes",
-      "Image": "https://example.com/pushup.jpg"
-    },
-    {
-      "Title": "Running",
-      "Category": "Cardio",
-      "Duration": "45 minutes",
-      "Image": "https://example.com/running.jpg"
-    },
-    {
-      "Title": "Yoga",
-      "Category": "Flexibility",
-      "Duration": "60 minutes",
-      "Image": "https://example.com/yoga.jpg"
-    }
-  ];
+function Workouts() {
+  const [workouts, setWorkouts] = useState([]);
+
+  useEffect(() => {
+    axios.get('<my_api_url>')  // Replace with your actual API URL
+      .then((response) => {
+        setWorkouts(response.data.workouts);  // Assuming the API returns workouts in a "workouts" field
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div>
-      <h3>Hello from the Workouts component</h3>
-      {/* Make sure to pass workoutsData to WorkoutList */}
-      <WorkoutList workouts={workoutsData} />
+      <h2>This is my Workouts Component.</h2>
+      <WorkoutList myWorkouts={workouts} />  {/* Pass data to WorkoutList component */}
     </div>
   );
-};
+}
 
 export default Workouts;
