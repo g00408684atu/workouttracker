@@ -10,8 +10,8 @@ const Navibar = () => {
             <Navbar.Brand href="/">Navbar</Navbar.Brand>
             <Nav className="me-auto">
               <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="/create">Create</Nav.Link>
-              <Nav.Link href="/read">Read</Nav.Link>
+              <Nav.Link href="/Workouts">Workouts</Nav.Link>
+              <Nav.Link href="/Addworkout">Addworkout</Nav.Link>
             </Nav>
           </Container>
       </Navbar>
