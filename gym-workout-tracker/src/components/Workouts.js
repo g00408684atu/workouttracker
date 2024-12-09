@@ -1,26 +1,21 @@
-import WorkoutList from "./WorkoutList";  // Adjusted to your component
-import { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
+import WorkoutDefinition from "./WorkoutDefinition";
 
-function Workouts() {
-  const [workouts, setWorkouts] = useState([]);
-
-  useEffect(() => {
-    axios.get('<my_api_url>')  // Replace with your actual API URL
-      .then((response) => {
-        setWorkouts(response.data.workouts);  // Assuming the API returns workouts in a "workouts" field
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+function Workouts(props) {
 
   return (
-    <div>
-      <h2>This is my Workouts Component.</h2>
-      <WorkoutList myWorkouts={workouts} />  {/* Pass data to WorkoutList component */}
-    </div>
+    <>
+      {props.myWorkouts.map((workout) => {
+        return (
+          <WorkoutDefinition
+            myworkout={workout} // Pass workout to WorkoutDefinition
+            key={workout._id} // Use id as key
+            Reload={props.ReloadData} // Pass Reload function
+          />
+        );
+      })}
+    </>
   );
-}
+} 
 
 export default Workouts;

@@ -1,26 +1,25 @@
-// Import React Router components for managing routes and navigation
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
-// Import custom components that will be used in the app
-import NavBar from './components/NaviBar';  // The navigation bar component
-import Heading from './components/Heading';                // The header component (not used in this file but likely for other purposes)
-import Footer from './components/Footer';                // The footer component
-import FirstPage from './components/FirstPage';              // The main content component (likely to show the landing page)
+import NavBar from './components/NaviBar';
+import Heading from './components/Heading';
+import Footer from './components/Footer';   
+import FirstPage from './components/FirstPage';
 import AddWorkout from './components/AddWorkout';
-import Workouts from './components/Workouts';
-import React from 'react';
-import './App.css';
+import ReadWorkout from './components/ReadWorkout';
+import EditWorkout from './components/EditWorkout';
+
+
 
 function App() {
   return (
     <Router>
       <NavBar />
-      <Routes>
-        <Route path="/" element={<FirstPage />} />
-        <Route path="/Workouts" element={<Workouts/>} />
-        <Route path="/AddWorkout" element={<AddWorkout/>} />
-      </Routes>
-
+       <Routes>
+          <Route path="/" element={<FirstPage />} />
+          <Route path="/ReadWorkout" element={<ReadWorkout />} />
+          <Route path="/AddWorkout" element={<AddWorkout/>} />
+          <Route path="/EditWorkout/:id" element={<EditWorkout/>} /> {/*edit workout with ids*/}
+       </Routes>
       <Footer />
     </Router>
   );
