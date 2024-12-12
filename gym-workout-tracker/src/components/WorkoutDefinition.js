@@ -1,51 +1,54 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Card from 'react-bootstrap/Card';
+import Card from "react-bootstrap/Card";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 
 function WorkoutDefinition({ myworkout, Reload }) {
+  const {
+    title = "Untitled Workout",
+    reps = 0,
+    sets = 0,
+    image = "https://via.placeholder.com/150",
+    muscleGroup = "Unknown", 
+    _id = "",
+  } = myworkout;
 
-  // Destructure  'myworkout' object passed as a prop for defaults
-const {
-  title = "Untitled Workout",              
-  reps = 0,                                
-  sets = 0,                                
-  image = "https://via.placeholder.com/150", 
-  _id = ""                                 
-} = myworkout;
-//Any missing lines are filled off                      
-
-
-  // Function to handle the deletion of a workout
+  // Function to handle deletion of a workout
   const handleDelete = (e) => {
     e.preventDefault();
     axios
-      .delete(`http://localhost:4000/api/workout/${_id}`)
+      .delete(`http://localhost:4000/api/workouts/${_id}`) // Sends DELETE request to delete the workout by ID
       .then(() => {
-        Reload(); 
+        Reload(); // Reloads the workout list after deletion
       })
       .catch((error) => {
-        console.error("Error deleting workout:", error); 
+        console.error("Error deleting workout:", error);
       });
   };
-  
 
   return (
-    <div>
-      <Card style={{ width: "18rem", marginBottom: "20px" }}>
-        <Card.Header>{title}</Card.Header>
+    <div className="card">
+      <Card style={{ width: "100%", background: "transparent", border: "none" }}>
+        <Card.Header style={{ backgroundColor: "#b5ffbf", color: "#fff" }}>
+          {title}
+        </Card.Header>
         <Card.Body>
-          <Card.Img variant="top" src={image} alt={title} />
+          <Card.Img
+            variant="top"
+            src={image}
+            alt={title}
+            style={{ borderRadius: "5px" }}
+          />
           <blockquote className="blockquote mb-0">
+            <footer>Muscle Group: {muscleGroup}</footer>
             <footer>Reps: {reps}</footer>
             <footer>Sets: {sets}</footer>
           </blockquote>
         </Card.Body>
-        <Link className="btn btn-primary" to={"/EditWorkout/" + myworkout._id}> {/*Links to update*/}
+        <Link className="btn btn-primary" to={`/EditWorkout/${_id}`}>
           Update
         </Link>
-        <Button variant="danger" onClick={handleDelete}> {/*Preforms Delete function*/}
+        <Button variant="danger" onClick={handleDelete}>
           Delete
         </Button>
       </Card>
@@ -53,4 +56,4 @@ const {
   );
 }
 
-export default WorkoutDefinition
+export default WorkoutDefinition;

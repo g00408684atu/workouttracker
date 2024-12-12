@@ -2,20 +2,20 @@ import React from "react";
 import WorkoutDefinition from "./WorkoutDefinition";
 
 function Workouts(props) {
-
   return (
-    <>
+    <div className="workout-container">
       {props.myWorkouts.map((workout) => {
         return (
           <WorkoutDefinition
-            myworkout={workout} // Pass workout to WorkoutDefinition
-            key={workout._id} // Use id as key
-            Reload={props.ReloadData} // Pass Reload function
+            myworkout={workout}
+            key={workout._id} // Uses the unique _id as a key for React
+            Reload={props.ReloadData} // Passes the Reload function
           />
         );
       })}
-    </>
+    </div>
   );
-} 
+}
 
 export default Workouts;
+

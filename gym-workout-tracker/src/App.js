@@ -7,6 +7,7 @@ import FirstPage from './components/FirstPage';
 import AddWorkout from './components/AddWorkout';
 import ReadWorkout from './components/ReadWorkout';
 import EditWorkout from './components/EditWorkout';
+import './App.css';
 
 
 

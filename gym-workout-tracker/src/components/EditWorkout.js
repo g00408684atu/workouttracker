@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -9,48 +8,43 @@ export default function EditWorkout(props) {
   
   // Use the 'id' parameter from the URL
   let { id } = useParams();
-
   const [title, setTitle] = useState("");
   const [sets, setSets] = useState("");
   const [reps, setReps] = useState("");
   const [image, setImage] = useState("");
+  const [muscleGroup, setMuscleGroup] = useState(""); 
 
   const navigate = useNavigate();
 
-  // useEffect hook to fetch workout data
   useEffect(() => {
-
-    axios.get(`http://localhost:4000/api/workout/`+ id)
+    axios.get(`http://localhost:4000/api/workouts/`+ id)
       .then((response) => {
         setTitle(response.data.title);
         setSets(response.data.sets);
         setReps(response.data.reps);
         setImage(response.data.image);
+        setMuscleGroup(response.data.muscleGroup);
       })
       .catch((error) => {
         console.error(error);
       });
   }, [id]);  // Dependency array to refresh when the id changes
 
- 
   const handleSubmit = (event) => {
-    event.preventDefault();  // Prevent the default form submission behavior
+    event.preventDefault(); 
 
-    // updated workout data
-    const newWorkout = { id, title, sets, reps, image };
+ 
+    const newWorkout = { id, title, sets, reps, image, muscleGroup };
 
-    axios.put(`http://localhost:4000/api/workout/`+ id, newWorkout)
+    axios.put(`http://localhost:4000/api/workouts/`+ id, newWorkout)
       .then((res) => {
-
         console.log(res.data);
-        
         navigate('/ReadWorkout');
       });
   }
 
   return (
-    <div>
-      {/* Render the form for editing workout */}
+    <div className="text-center">
       <form onSubmit={handleSubmit}>
 
         <div className="form-group">
@@ -63,7 +57,6 @@ export default function EditWorkout(props) {
           />
         </div>
 
-   
         <div className="form-group">
           <label>Sets: </label>
           <input
@@ -73,7 +66,6 @@ export default function EditWorkout(props) {
             onChange={(e) => setSets(e.target.value)}
           />
         </div>
-
 
         <div className="form-group">
           <label>Reps: </label>
@@ -85,7 +77,6 @@ export default function EditWorkout(props) {
           />
         </div>
 
-
         <div className="form-group">
           <label>Image URL: </label>
           <input
@@ -93,6 +84,16 @@ export default function EditWorkout(props) {
             className="form-control"
             value={image}
             onChange={(e) => setImage(e.target.value)} 
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Muscle Group: </label>
+          <input
+            type="text"
+            className="form-control"
+            value={muscleGroup} 
+            onChange={(e) => setMuscleGroup(e.target.value)}
           />
         </div>
 

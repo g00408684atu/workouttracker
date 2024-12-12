@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";//React hooks
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Workouts from "./Workouts";
 
 const ReadWorkout = () => {
-  // State to store list of workouts
   const [workouts, setWorkouts] = useState([]);
 
-  // Function to get workouts from backend
+  
   const Reload = () => {
     console.log("Reloading workouts data...");
     axios
-      .get("http://localhost:4000/api/workouts") //backend URL
+      .get("http://localhost:4000/api/workouts") 
       .then((response) => {
-        setWorkouts(response.data.workouts); // Update state with workouts
+        setWorkouts(response.data.workouts); // Updates the state with the fetched workouts
       })
       .catch((error) => {
         console.error("Error fetching workouts:", error);
@@ -20,13 +19,12 @@ const ReadWorkout = () => {
   };
 
   useEffect(() => {
-    Reload();
-  }, []);
+    Reload(); 
+  }, []); // Empty dependency array ensures this runs only once
 
   return (
-    <div>
-      <h3>Hello from ReadWorkout component!</h3>
-      {/* Pass workouts and Reload function as props to Workouts component */}
+    <div className="text-center">
+      <h3>Heres the list of workouts you have so far.</h3>
       <Workouts myWorkouts={workouts} ReloadData={Reload} />
     </div>
   );

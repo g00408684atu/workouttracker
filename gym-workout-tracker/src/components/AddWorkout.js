@@ -1,73 +1,98 @@
-import axios from "axios"; 
-import { useState } from "react"; //useState for component state
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const AddWorkout = () => {
-    // State variables to hold workout details
-    const [title, setTitle] = useState('');
-    const [reps, setReps] = useState(''); 
-    const [sets, setSets] = useState(''); 
-    const [image, setImage] = useState('');
+export default function AddWorkout() {
+  const [title, setTitle] = useState("");
+  const [sets, setSets] = useState("");
+  const [reps, setReps] = useState("");
+  const [image, setImage] = useState("");
+  const [muscleGroup, setMuscleGroup] = useState(""); 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Create a workout object with the current state values
-        const workout = { title, reps, sets, image };
+  const navigate = useNavigate();
 
-        //POST request to server to add new workout
-        axios.post('http://localhost:4000/api/workouts', workout)
-            .then(response => {
-                console.log('Workout added:', response.data);
-            })
-            .catch(error => {
-                console.error('There was an error adding the workout!', error);
-            });
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-        // Log the workout object to the console
-        console.log(workout);
-    }
+    
+    const newWorkout = { title, sets, reps, image, muscleGroup };
 
-    return (
-        <div>
-            <h3>Add a New Workout</h3>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Workout Title: </label>
-                    <input type="text"
-                        className="form-control"
-                        value={title}
-                        onChange={(e) => { setTitle(e.target.value) }}
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Number of Reps: </label>
-                    <input type="number"
-                        className="form-control"
-                        value={reps}
-                        onChange={(e) => { setReps(e.target.value) }}
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Number of Sets: </label>
-                    <input type="number"
-                        className="form-control"
-                        value={sets}
-                        onChange={(e) => { setSets(e.target.value) }}
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Workout Image URL: </label>
-                    <input type="text"
-                        className="form-control"
-                        value={image}
-                        onChange={(e) => { setImage(e.target.value) }}
-                    />
-                </div>
-                <div>
-                    <input type="submit" value="Add Workout" className="btn btn-primary" />
-                </div>
-            </form>
+    axios
+      .post(`http://localhost:4000/api/workouts`, newWorkout) // Send POST request to create a new workout
+      .then((res) => {
+        console.log(res.data);
+        navigate("/ReadWorkout"); // Navigate to the workout list page after adding a workout
+      })
+      .catch((error) => {
+        console.error("Error adding workout:", error);
+      });
+  };
+
+  return (
+    <div className="text-center">
+      <h3>Add a New Workout</h3>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Workout Title: </label>
+          <input
+            type="text"
+            className="form-control"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
         </div>
-    );
-}
 
-export default AddWorkout;
+        <div className="form-group">
+          <label>Sets: </label>
+          <input
+            type="number"
+            className="form-control"
+            value={sets}
+            onChange={(e) => setSets(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Reps: </label>
+          <input
+            type="number"
+            className="form-control"
+            value={reps}
+            onChange={(e) => setReps(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Image URL: </label>
+          <input
+            type="text"
+            className="form-control"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Muscle Group: </label>
+          <input
+            type="text"
+            className="form-control"
+            value={muscleGroup}
+            onChange={(e) => setMuscleGroup(e.target.value)}
+          />
+        </div>
+
+        <div className="form-group">
+          <input
+            type="submit"
+            value="Add Workout"
+            className="btn btn-primary"
+          />
+        </div>
+      </form>
+    </div>
+  );
+}

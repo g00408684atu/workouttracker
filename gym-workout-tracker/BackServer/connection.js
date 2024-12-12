@@ -13,7 +13,7 @@ const bodyParser = require('body-parser');
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*"); // Allow requests from any origin
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Specifics
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); //
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); 
   next();
 });
 
@@ -33,7 +33,8 @@ const workoutSchema = new mongoose.Schema({
   title: String,  
   reps: Number, 
   sets: Number,  
-  image: String 
+  image: String,
+  muscleGroup: String 
 });
 
 // model for database
@@ -47,7 +48,7 @@ app.get('/api/workouts', async (req, res) => {
 });
 
   //Specific workouts
-    app.get('/api/workout/:id', async (req, res) => {
+    app.get('/api/workouts/:id', async (req, res) => {
       const workout = await Workout.findById(req.params.id);
       res.status(200).json(workout);
     });
@@ -56,9 +57,9 @@ app.get('/api/workouts', async (req, res) => {
 //Post endpoint for creating workouts
   app.post('/api/workouts', async (req, res) => {
     console.log("Workout added: " + req.body.title);
-    const { title, reps, sets, image } = req.body; //details from req
+    const { title, reps, sets, image, muscleGroup } = req.body;
 
-    const newWorkout = new Workout({ title, reps, sets, image });
+    const newWorkout = new Workout({ title, reps, sets, image, muscleGroup });
 
     await newWorkout.save();
 
@@ -66,14 +67,13 @@ app.get('/api/workouts', async (req, res) => {
   });
 
 //put endpoint for updating workouts
-app.put('/api/workout/:id', async (req, res) => {
-  // The { new: true } code so updated it now replaced with old details
+app.put('/api/workouts/:id', async (req, res) => {
   let workout = await Workout.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.status(200).json(workout);
 });
 
 //Delete endpoint for workouts
-app.delete('/api/workout/:id', async (req, res) => {
+app.delete('/api/workouts/:id', async (req, res) => {
   console.log('Deleting workout with ID:', req.params.id);
   
       const workout = await Workout.findByIdAndDelete(req.params.id);
