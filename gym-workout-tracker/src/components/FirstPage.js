@@ -4,19 +4,25 @@ import WorkoutDefinition from "./WorkoutDefinition";
 
 const FirstPage = () => {
   const [workouts, setWorkouts] = useState([]); 
-  const [searchTitle, setSearchTitle] = useState(""); // State for title search
-  const [searchMuscleGroup, setSearchMuscleGroup] = useState(""); // State for muscle group search
+  const [searchTitle, setSearchTitle] = useState(""); 
+  const [searchMuscleGroup, setSearchMuscleGroup] = useState(""); 
   const [filteredWorkouts, setFilteredWorkouts] = useState([]); 
 
-  useEffect(() => {
+  // Fetch workouts from the API
+  const fetchWorkouts = () => {
     axios
       .get("http://localhost:4000/api/workouts")
       .then((response) => {
         setWorkouts(response.data.workouts);
+        filterWorkouts(searchTitle, searchMuscleGroup, response.data.workouts);
       })
       .catch((error) => {
         console.error("Error fetching workouts:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchWorkouts();
   }, []);
 
   // Handle title search
@@ -34,8 +40,8 @@ const FirstPage = () => {
   };
 
   // Filter workouts by both title and muscle group
-  const filterWorkouts = (titleTerm, muscleGroupTerm) => {
-    let filtered = workouts;
+  const filterWorkouts = (titleTerm, muscleGroupTerm, workoutList = workouts) => {
+    let filtered = workoutList;
 
     if (titleTerm) {
       filtered = filtered.filter((workout) =>
@@ -52,6 +58,18 @@ const FirstPage = () => {
     setFilteredWorkouts(filtered);
   };
 
+  // Handle delete and refresh the list
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:4000/api/workout/${id}`)
+      .then(() => {
+        fetchWorkouts(); // Refresh the list after deletion
+      })
+      .catch((error) => {
+        console.error("Error deleting workout:", error);
+      });
+  };
+
   return (
     <div className="text-center">
       <h1>Looking for a specific workout? Search here</h1>
@@ -60,7 +78,7 @@ const FirstPage = () => {
       <div style={{ margin: "20px 0" }}>
         <input
           type="text"
-          placeholder="Search workout by name"
+          placeholder="Search for a workout by title..."
           value={searchTitle}
           onChange={handleTitleSearch}
           style={{
@@ -73,12 +91,12 @@ const FirstPage = () => {
           }}
         />
       </div>
-      <h2>Looking for workouts for specific muscles? Search below here</h2>
+
       {/* Search by Muscle Group */}
       <div style={{ margin: "20px 0" }}>
         <input
           type="text"
-          placeholder="Search for a muscle group"
+          placeholder="Search for a workout by muscle group..."
           value={searchMuscleGroup}
           onChange={handleMuscleGroupSearch}
           style={{
@@ -99,7 +117,8 @@ const FirstPage = () => {
               <WorkoutDefinition
                 key={workout._id}
                 myworkout={workout}
-                Reload={() => {}}
+                Reload={fetchWorkouts} // Pass the fetchWorkouts function to refresh data
+                handleDelete={handleDelete} // Pass handleDelete to delete workouts
               />
             ))
           ) : (
