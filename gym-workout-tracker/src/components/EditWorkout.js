@@ -98,7 +98,7 @@ export default function EditWorkout(props) {
         </div>
 
         <div className="form-group">
-          <input type="submit" value="Edit Workout" className="btn btn-primary" />
+          <input type="submit" value="Save" className="btn btn-primary" />
         </div>
       </form>
     </div>
